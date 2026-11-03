@@ -1,4 +1,4 @@
-// Arm movement test for one stepper motor (z-axis only) + matcha dispenser servo
+// Arm movement test for one stepper motor (z-axis only) + matcha dispenser servo and water solenoid valve 
 
 #include <Wire.h>
 #include <Servo.h>
