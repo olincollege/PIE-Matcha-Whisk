@@ -15,6 +15,8 @@ const int xSteps = 25;  // number of steps that the arm will move in the x-axis
 const int whiskCountMax = 5;  // maximum amount of times the whisk will move back and forth
 int whiskCount = 0;           // amount of times the whisk has gone back and forth
 
+int dispenseTime = 5000;  // amount of time that the dispensers will take before arm movement sequence starts
+
 void setup() {
   Serial.begin(9600);  // set up Serial library at 9600 bps
 
@@ -29,6 +31,9 @@ void setup() {
 }
 
 void loop() {
+  // waits for dispensers to finish their sequences before arm starts moving
+  delay(dispenseTime);
+
   // moves arm down into bowl
   zMotor->step(zSteps, FORWARD, MICROSTEP);
 
