@@ -1,63 +1,47 @@
-// Arm movement test based on the circuit schematic with 2 servos
+// Arm movement test for two stepper motors
 
-#include <Servo.h>
+#include <Wire.h>
+#include <Adafruit_MotorShield.h>
 
-Servo xServo;  // servo for x-axis movement
-Servo zServo;  // servo for z-axis movement
+// Create the motor shield object with the default I2C address
+Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
-int xPos = 0;  // stores x-axis servo position
-int zPos = 0;  // stores z-axis servo position
+Adafruit_StepperMotor *xMotor = AFMS.getStepper(200, 1);  // Stepper motor for x-axis motion, connected to motor port #1
+Adafruit_StepperMotor *zMotor = AFMS.getStepper(200, 2);  // Stepper motor for z-axis motion, connected to motor port #2
 
-int xMax = 180;  // stores maximum x-axis position
-int zMax = 180;  // stores maximum z-axis position
+const int zSteps = 50;  // number of steps that the arm will move in the z-axis
+const int xSteps = 25;  // number of steps that the arm will move in the x-axis
 
-int maxWhiskTime = 15000;    // stores maximum amount of time we want to whisk for
-uint32_t whiskTime = 0;  // stores amount of time we have been whisking for
+const int whiskCountMax = 5;  // maximum amount of times the whisk will move back and forth
+int whiskCount = 0;           // amount of times the whisk has gone back and forth
 
 void setup() {
-  xServo.attach(9);   // x-axis servo connects to pin D9
-  zServo.attach(10);  // z-axis servo connects to pin D10
+  Serial.begin(9600);  // set up Serial library at 9600 bps
+
+  if (!AFMS.begin()) {  // create with the default frequency 1.6KHz
+    Serial.println("Could not find Motor Shield. Check wiring.");
+    while (1);
+  }
+  Serial.println("Motor Shield found.");
+
+  xMotor->setSpeed(10);  // sets x-axis motor speed to 10 rpm
+  zMotor->setSpeed(50);  // sets z-axis motor speed to 50 rpm
 }
 
-// loops infinitely with no consideration for dispensers or bowl changes, just for testing
 void loop() {
   // moves arm down into bowl
-  for (zPos = 0; zPos <= zMax; zPos += 1) {
-    zServo.write(zPos);
-    delay(15);
+  zMotor->step(zSteps, FORWARD, MICROSTEP);
+
+  // whisks back and forth a given amount of times
+  while (whiskCount <= whiskCountMax) {
+    xMotor->step(xSteps, FORWARD, MICROSTEP);
+    xMotor->step(xSteps, BACKWARD, MICROSTEP);
+    whiskCount++;
   }
 
-  // starts keeping track of how long we have been whisking for
-  whiskTime = millis();
+  // moves arm up out of bowl
+  zMotor->step(zSteps, BACKWARD, MICROSTEP);
 
-  // whisks back and forth for a set amount of time
-  for (whiskTime <= maxWhiskTime) {
-    // moves whisk in one direction
-    for (xPos = 0; xPos <= xMax; xPos += 1) {
-      xServo.write(xPos);
-      delay(15);
-    }
-
-    // moves whisk in opposite direction
-    for (xPos = xMax; xPos >= 0; xPos -= 1) {
-      xServo.write(xPos);
-      delay(15);
-    }
-  }
-
-  // sets whisk back to default x-axis position if it ended somewhere else
-  if (xPos != 0) {
-    for (xPos = xServo.read(); xPos >= 0; xPos -= 1) {
-      xServo.write(xPos);
-      delay(15);
-    }
-  }
-
-  // raises arm out of bowl
-  for (zPos = zMax; zPos >= 0; zPos -= 1) {
-    zServo.write(zPos);
-    delay(15);
-  }
-
-  delay(5000);  // 5 second delay till redoing the loop
+  // wait 5 seconds before redoing the loop
+  delay(5000);
 }
