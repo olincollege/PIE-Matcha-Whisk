@@ -13,9 +13,12 @@ Servo matchaServo;  // servo for matcha dispenser
 
 const int zSteps = 50;  // number of steps that the arm will move in the z-axis
 
+int solenoidPin = 8;  // solenoid valve will be connected to pin D8
+
 int matchaPos = 0;    // stores matcha dispenser position
 int matchaMax = 180;  // stores maximum position that matcha dispenser will reach
 
+int waterTime = 1000;  // amount of time that water will dispense for
 int whiskTime = 5000;  // amount of time that the whisk will be moving in the x-axis for
 
 void setup() {
@@ -29,10 +32,25 @@ void setup() {
 
   zMotor->setSpeed(50);  // sets z-axis motor speed to 50 rpm
 
+  pinMode(solenoidPin, OUTPUT);    // sets solenoid pin as an output
+  digitalWrite(solenoidPin, LOW);  // ensures solenoid valve starts as closed
+
   matchaServo.attach(9);  // matcha dispenser servo connects to pin D9
 }
 
 void loop() {
+  // water valve opens
+  digitalWrite(solenoidPin, HIGH);
+
+  // valve stays open for amount of time we want water to flow for
+  delay(waterTime);
+
+  // water valve closes
+  digitalWrite(solenoidPin, LOW);
+
+  // waits 2 seconds before matcha dispenser sequence starts
+  delay(2000);
+
   // matcha dispenser opens
   for (matchaPos = 0; matchaPos <= matchaMax; matchaPos += 1) {
     matchaServo.write(matchaPos);
