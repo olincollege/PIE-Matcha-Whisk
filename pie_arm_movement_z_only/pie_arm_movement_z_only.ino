@@ -39,18 +39,6 @@ void setup() {
 }
 
 void loop() {
-  // water valve opens
-  digitalWrite(solenoidPin, HIGH);
-
-  // valve stays open for amount of time we want water to flow for
-  delay(waterTime);
-
-  // water valve closes
-  digitalWrite(solenoidPin, LOW);
-
-  // waits 2 seconds before matcha dispenser sequence starts
-  delay(2000);
-
   // matcha dispenser opens
   for (matchaPos = 0; matchaPos <= matchaMax; matchaPos += 1) {
     matchaServo.write(matchaPos);
@@ -62,6 +50,18 @@ void loop() {
     matchaServo.write(matchaPos);
     delay(15);
   }
+
+  // waits 2 seconds before water dispenser sequence starts
+  delay(2000);
+
+  // water valve opens
+  digitalWrite(solenoidPin, HIGH);
+
+  // valve stays open for amount of time we want water to flow for
+  delay(waterTime);
+
+  // water valve closes
+  digitalWrite(solenoidPin, LOW);
 
   // waits 2 seconds before the arm starts moving
   delay(2000);
@@ -76,4 +76,3 @@ void loop() {
 
   // wait 5 seconds before redoing the loop
   delay(5000);
-}
