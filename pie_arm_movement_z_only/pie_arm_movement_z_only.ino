@@ -11,7 +11,7 @@ Adafruit_StepperMotor *zMotor = AFMS.getStepper(200, 2);  // Stepper motor for z
 
 Servo matchaServo;  // servo for matcha dispenser
 
-const int zSteps = 50;  // number of steps that the arm will move in the z-axis
+const int zSteps = 250;  // number of steps that the arm will move in the z-axis
 
 int solenoidPin = 8;  // solenoid valve will be connected to pin D8
 
@@ -30,7 +30,7 @@ void setup() {
   }
   Serial.println("Motor Shield found.");
 
-  zMotor->setSpeed(50);  // sets z-axis motor speed to 50 rpm
+  zMotor->setSpeed(500);  // sets z-axis motor speed to 50 rpm
 
   pinMode(solenoidPin, OUTPUT);    // sets solenoid pin as an output
   digitalWrite(solenoidPin, LOW);  // ensures solenoid valve starts as closed
@@ -68,8 +68,6 @@ void loop() {
 
   // moves arm down into bowl
   zMotor->step(zSteps, FORWARD, MICROSTEP);
-
-  Serial.println("I'm moving");
 
   delay(whiskTime);  // waits for whisk to finish moving in the x-axis before moving it up
 
