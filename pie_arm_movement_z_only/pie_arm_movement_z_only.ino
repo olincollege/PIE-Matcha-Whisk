@@ -78,8 +78,4 @@ void loop() {
 
   // wait 5 seconds before redoing the loop
   delay(5000);
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 2add1fcbbc5fdc6c0b6f790ad6bc0bc8421e74b7
