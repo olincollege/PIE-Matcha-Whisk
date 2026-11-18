@@ -1,4 +1,4 @@
-// Arm movement test for one stepper motor (z-axis only) + matcha dispenser servo and water solenoid valve 
+// Arm movement test for one stepper motor (z-axis only) + matcha dispenser servo and water solenoid valve
 
 #include <Wire.h>
 #include <Servo.h>
@@ -7,7 +7,7 @@
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
-Adafruit_StepperMotor *zMotor = AFMS.getStepper(200, 1);  // Stepper motor for z-axis motion, connected to motor port #1
+Adafruit_StepperMotor *zMotor = AFMS.getStepper(200, 2);  // Stepper motor for z-axis motion, connected to motor port #1
 
 Servo matchaServo;  // servo for matcha dispenser
 
@@ -42,13 +42,13 @@ void loop() {
   // matcha dispenser opens
   for (matchaPos = 0; matchaPos <= matchaMax; matchaPos += 1) {
     matchaServo.write(matchaPos);
-    delay(15);
+    delay(7);
   }
 
   // matcha dispenser closes
   for (matchaPos = matchaMax; matchaPos >= 0; matchaPos -= 1) {
     matchaServo.write(matchaPos);
-    delay(15);
+    delay(7);
   }
 
   // waits 2 seconds before water dispenser sequence starts
@@ -69,6 +69,8 @@ void loop() {
   // moves arm down into bowl
   zMotor->step(zSteps, FORWARD, MICROSTEP);
 
+  Serial.println("I'm moving");
+
   delay(whiskTime);  // waits for whisk to finish moving in the x-axis before moving it up
 
   // moves arm up out of bowl
@@ -76,4 +78,4 @@ void loop() {
 
   // wait 5 seconds before redoing the loop
   delay(5000);
-  
+}
