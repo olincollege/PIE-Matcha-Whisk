@@ -7,7 +7,7 @@
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
-Adafruit_StepperMotor *zMotor = AFMS.getStepper(200, 2);  // Stepper motor for z-axis motion, connected to motor port #1
+Adafruit_StepperMotor *zMotor = AFMS.getStepper(200, 1);  // Stepper motor for z-axis motion, connected to motor port #1
 
 Servo matchaServo;  // servo for matcha dispenser
 

@@ -1,4 +1,4 @@
-// Arm movement test for two stepper motors
+// Arm movement test for two stepper motors (one z-axis, one x-axis)
 
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>

@@ -12,7 +12,8 @@ Adafruit_StepperMotor *zMotor2 = AFMS.getStepper(200, 2);  // Stepper motor for 
 
 int zSteps = 0;  // number of steps that the arm will move in the z-axis
 
-int whiskTime = 5000;  // amount of time that the whisk will be moving in the x-axis for
+const int dispenseTime = 5000;  // amount of time that the dispensers will take before arm movement sequence starts
+const int whiskTime = 5000;     // amount of time that the whisk will be moving in the x-axis for
 
 void setup() {
   Serial.begin(9600);  // set up Serial library at 9600 bps
@@ -28,6 +29,8 @@ void setup() {
 }
 
 void loop() {
+  delay(dispenseTime);  // wait for dispenser sequences to finish before arm starts moving
+
   // moves arm down into bowl
   for (zSteps = 0; zSteps <= 75; zSteps++) {
     zMotor1->step(1, FORWARD, SINGLE);
