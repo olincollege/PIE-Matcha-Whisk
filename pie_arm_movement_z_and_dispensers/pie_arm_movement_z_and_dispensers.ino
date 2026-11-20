@@ -67,12 +67,12 @@ void loop() {
   delay(2000);
 
   // moves arm down into bowl
-  zMotor->step(zSteps, FORWARD, MICROSTEP);
+  zMotor->step(zSteps, FORWARD, SINGLE);
 
   delay(whiskTime);  // waits for whisk to finish moving in the x-axis before moving it up
 
   // moves arm up out of bowl
-  zMotor->step(zSteps, BACKWARD, MICROSTEP);
+  zMotor->step(zSteps, BACKWARD, SINGLE);
 
   // wait 5 seconds before redoing the loop
   delay(5000);

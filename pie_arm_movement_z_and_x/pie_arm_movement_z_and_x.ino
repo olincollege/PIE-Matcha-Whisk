@@ -35,17 +35,17 @@ void loop() {
   delay(dispenseTime);
 
   // moves arm down into bowl
-  zMotor->step(zSteps, FORWARD, MICROSTEP);
+  zMotor->step(zSteps, FORWARD, SINGLE);
 
   // whisks back and forth a given amount of times
   while (whiskCount <= whiskCountMax) {
-    xMotor->step(xSteps, FORWARD, MICROSTEP);
-    xMotor->step(xSteps, BACKWARD, MICROSTEP);
+    xMotor->step(xSteps, FORWARD, SINGLE);
+    xMotor->step(xSteps, BACKWARD, SINGLE);
     whiskCount++;
   }
 
   // moves arm up out of bowl
-  zMotor->step(zSteps, BACKWARD, MICROSTEP);
+  zMotor->step(zSteps, BACKWARD, SINGLE);
 
   // wait 5 seconds before redoing the loop
   delay(5000);
